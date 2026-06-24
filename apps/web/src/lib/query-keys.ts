@@ -1,0 +1,18 @@
+export const queryKeys = {
+  me: ["me"] as const,
+  sports: ["sports"] as const,
+  players: (filters: Record<string, unknown>) => ["players", filters] as const,
+  matches: (filters: Record<string, unknown>) => ["matches", filters] as const,
+  match: (id: string) => ["match", id] as const,
+  matchParticipants: (id: string) => ["match", id, "participants"] as const,
+  matchJoinRequests: (id: string) => ["match", id, "join-requests"] as const,
+  matchInvites: (id: string) => ["match", id, "invites"] as const,
+  myGames: ["my-games"] as const,
+  connections: (filters: Record<string, unknown>) => ["connections", filters] as const,
+  notifications: (page: number) => ["notifications", page] as const,
+  teammateRequests: (filters: Record<string, unknown>) => ["teammate-requests", filters] as const,
+  teammateRequest: (id: string) => ["teammate-request", id] as const,
+  opponentRequests: (filters: Record<string, unknown>) => ["opponent-requests", filters] as const,
+  opponentRequest: (id: string) => ["opponent-request", id] as const,
+  user: (id: string) => ["user", id] as const,
+};

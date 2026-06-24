@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@gamepool/config/*": ["./packages/config/*"]
+    }
+  }
+}

@@ -1,0 +1,18 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
+
+export default function ErrorPage({
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  return (
+    <main className="mx-auto flex min-h-screen max-w-lg flex-col items-center justify-center gap-4 px-4 text-center">
+      <h1 className="text-2xl font-bold">Something went wrong</h1>
+      <p className="text-sm text-muted-foreground">Please try again.</p>
+      <Button onClick={reset}>Retry</Button>
+    </main>
+  );
+}
