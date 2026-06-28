@@ -37,6 +37,20 @@ export type AvailabilityWindow = {
   endTime: string;
 };
 
+export type PlayerSearchResult = {
+  id: string;
+  displayName?: string;
+  avatarUrl?: string | null;
+  city?: string;
+  area?: string | null;
+  bio?: string;
+  sports?: UserSport[];
+  userSports?: UserSport[];
+  limited?: boolean;
+  distanceKm?: number;
+  profile?: UserProfile | null;
+};
+
 export type User = {
   id: string;
   firebaseUid: string;
@@ -46,6 +60,12 @@ export type User = {
   profile: UserProfile | null;
   userSports?: UserSport[];
   availability?: AvailabilityWindow[];
+  createdAt?: string;
+  stats?: {
+    matchesHosted: number;
+    matchesJoined: number;
+    memberSince: string;
+  };
 };
 
 export type Sport = {

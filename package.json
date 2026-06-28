@@ -12,6 +12,7 @@
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
     "test": "turbo test",
+    "test:watch": "vitest",
     "format": "prettier --write \"**/*.{ts,tsx,js,json,md}\"",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
@@ -19,21 +20,29 @@
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
-    "db:reset": "prisma migrate reset"
+    "db:reset": "prisma migrate reset",
+    "validate:env": "tsx scripts/validate-production-env.ts",
+    "bootstrap:admin": "tsx scripts/bootstrap-admin.ts",
+    "test:e2e": "playwright test --config e2e/playwright.config.ts",
+    "test:e2e:ui": "playwright test --config e2e/playwright.config.ts --ui",
+    "test:e2e:install": "playwright install chromium"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   },
   "devDependencies": {
+    "@playwright/test": "^1.49.1",
     "@types/node": "^22.10.2",
     "bcryptjs": "^2.4.3",
     "@types/bcryptjs": "^2.4.6",
+    "dotenv": "^16.4.7",
     "dotenv-cli": "^8.0.0",
     "prettier": "^3.4.2",
     "prisma": "^5.22.0",
     "tsx": "^4.19.2",
     "turbo": "^2.3.3",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0"

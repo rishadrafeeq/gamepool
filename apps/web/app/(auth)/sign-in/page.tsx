@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { toast } from "sonner";
 
+import { AuthMethodTabs } from "@/components/auth/auth-method-tabs";
+import { PhoneAuthForm } from "@/components/auth/phone-auth-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,6 +31,11 @@ export default function SignInPage() {
     defaultValues: { email: "", password: "" },
   });
 
+  async function afterAuth() {
+    const res = await apiFetch<User>("/api/v1/users/me");
+    router.push(isProfileComplete(res.data) ? "/home" : "/onboarding/sports");
+  }
+
   async function onSubmit(values: FormValues) {
     if (!isFirebaseClientConfigured()) {
       toast.error("Firebase is not configured");
@@ -36,8 +43,7 @@ export default function SignInPage() {
     }
     try {
       await signInWithEmail(values.email, values.password);
-      const res = await apiFetch<User>("/api/v1/users/me");
-      router.push(isProfileComplete(res.data) ? "/home" : "/onboarding/sports");
+      await afterAuth();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Sign in failed");
     }
@@ -49,19 +55,24 @@ export default function SignInPage() {
         <h1 className="text-2xl font-bold">Sign in</h1>
         <p className="text-sm text-muted-foreground">Welcome back to GamePool</p>
       </div>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" autoComplete="email" {...form.register("email")} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
-          <Input id="password" type="password" autoComplete="current-password" {...form.register("password")} />
-        </div>
-        <Button type="submit" className="w-full min-h-[44px]" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? "Signing in..." : "Sign in"}
-        </Button>
-      </form>
+      <AuthMethodTabs
+        emailContent={
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" autoComplete="email" {...form.register("email")} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input id="password" type="password" autoComplete="current-password" {...form.register("password")} />
+            </div>
+            <Button type="submit" className="w-full min-h-[44px]" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting ? "Signing in..." : "Sign in with email"}
+            </Button>
+          </form>
+        }
+        phoneContent={<PhoneAuthForm mode="sign-in" onSuccess={afterAuth} />}
+      />
       <p className="text-center text-sm text-muted-foreground">
         New here?{" "}
         <Link href="/sign-up" className="text-primary underline-offset-4 hover:underline">

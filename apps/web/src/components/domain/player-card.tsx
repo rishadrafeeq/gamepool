@@ -7,11 +7,12 @@ import type { User, UserProfile } from "@/types";
 
 type PlayerCardProps = {
   userId: string;
-  profile: UserProfile | null;
+  profile: Partial<UserProfile> | null;
   sports?: User["userSports"];
+  distanceKm?: number;
 };
 
-export function PlayerCard({ userId, profile, sports }: PlayerCardProps) {
+export function PlayerCard({ userId, profile, sports, distanceKm }: PlayerCardProps) {
   const name = profile?.displayName ?? "Player";
   const initials = name.slice(0, 2).toUpperCase();
   const primary = sports?.find((s) => s.isPrimary) ?? sports?.[0];
@@ -28,6 +29,7 @@ export function PlayerCard({ userId, profile, sports }: PlayerCardProps) {
             <p className="truncate font-medium">{name}</p>
             <p className="truncate text-sm text-muted-foreground">
               {[profile?.city, profile?.area].filter(Boolean).join(", ")}
+              {distanceKm != null ? ` · ${distanceKm} km` : ""}
             </p>
             {primary?.sport && (
               <div className="mt-2">

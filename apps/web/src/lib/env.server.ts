@@ -2,17 +2,29 @@ import "server-only";
 
 import { z } from "zod";
 
-const serverEnvSchema = z.object({
-  NODE_ENV: z
-    .enum(["development", "test", "production"])
-    .default("development"),
-  DATABASE_URL: z.string().min(1),
-  DIRECT_URL: z.string().optional(),
-  FIREBASE_PROJECT_ID: z.string().optional(),
-  FIREBASE_CLIENT_EMAIL: z.string().optional(),
-  FIREBASE_PRIVATE_KEY: z.string().optional(),
-  ADMIN_JWT_SECRET: z.string().min(16).optional(),
-});
+const serverEnvSchema = z
+  .object({
+    NODE_ENV: z
+      .enum(["development", "test", "production"])
+      .default("development"),
+    DATABASE_URL: z.string().min(1),
+    DIRECT_URL: z.string().optional(),
+    FIREBASE_PROJECT_ID: z.string().optional(),
+    FIREBASE_CLIENT_EMAIL: z.string().optional(),
+    FIREBASE_PRIVATE_KEY: z.string().optional(),
+    ADMIN_JWT_SECRET: z.string().min(16).optional(),
+  })
+  .superRefine((env, ctx) => {
+    if (env.NODE_ENV === "production") {
+      if (!env.ADMIN_JWT_SECRET || env.ADMIN_JWT_SECRET.length < 32) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "ADMIN_JWT_SECRET must be at least 32 characters in production",
+          path: ["ADMIN_JWT_SECRET"],
+        });
+      }
+    }
+  });
 
 export type ServerEnv = z.infer<typeof serverEnvSchema>;
 

@@ -88,6 +88,36 @@ export function useExpressOpponentInterest(id: string) {
   });
 }
 
+export function useReviewTeammateInterest(requestId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ interestId, action }: { interestId: string; action: "APPROVE" | "DECLINE" }) =>
+      apiFetch(`/api/v1/teammate-requests/${requestId}/interests/${interestId}`, {
+        method: "PATCH",
+        body: JSON.stringify({ action }),
+      }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: queryKeys.teammateRequest(requestId) });
+      qc.invalidateQueries({ queryKey: ["teammate-requests"] });
+    },
+  });
+}
+
+export function useReviewOpponentInterest(requestId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ interestId, action }: { interestId: string; action: "APPROVE" | "DECLINE" }) =>
+      apiFetch(`/api/v1/opponent-requests/${requestId}/interests/${interestId}`, {
+        method: "PATCH",
+        body: JSON.stringify({ action }),
+      }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: queryKeys.opponentRequest(requestId) });
+      qc.invalidateQueries({ queryKey: ["opponent-requests"] });
+    },
+  });
+}
+
 export function usePairOpponentRequest(id: string) {
   const qc = useQueryClient();
   return useMutation({

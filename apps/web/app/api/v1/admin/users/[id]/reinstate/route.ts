@@ -11,5 +11,5 @@ type Params = { params: Promise<{ id: string }> };
 export async function POST(request: NextRequest, { params }: Params) {
   const { id } = await params;
   requireParam(id, "id");
-  return withAdmin(request, ({ adminId }) => service.reinstateUser(adminId, id));
+  return withAdmin(request, ({ adminId }) => service.reinstateUser(adminId, id), ["SUPER_ADMIN"]);
 }

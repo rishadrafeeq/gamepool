@@ -28,3 +28,4 @@ export const adminListMatchesSchema = paginationSchema.extend({
 });
 
 export type AdminLoginBody = z.infer<typeof adminLoginSchema>;
+export type AdminUpdateMatchBody = z.infer<typeof adminUpdateMatchSchema>;

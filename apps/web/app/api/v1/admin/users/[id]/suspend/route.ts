@@ -16,5 +16,5 @@ export async function POST(request: NextRequest, { params }: Params) {
   return withAdmin(request, async ({ adminId }) => {
     const body = await parseBody(request, adminSuspendUserSchema);
     return service.suspendUser(adminId, id, body.reason);
-  });
+  }, ["MODERATOR", "SUPER_ADMIN"]);
 }

@@ -49,15 +49,47 @@ export class AdminService {
   }
 
   async dashboardSummary() {
-    const [newUsersToday, activeMatches, pendingReports, wap, fillRate] = await Promise.all([
+    const [
+      totalUsers,
+      newUsersToday,
+      activeMatches,
+      pendingReports,
+      suspendedUsers,
+      wap,
+      fillRate,
+    ] = await Promise.all([
+      this.admin.countTotalUsers(),
       this.admin.countUsersToday(),
       this.admin.countActiveMatches(),
       this.admin.countPendingReports(),
+      this.admin.countSuspendedUsers(),
       this.admin.weeklyActivePlayers(),
       this.admin.matchFillRate7d(),
     ]);
 
-    return { newUsersToday, activeMatches, pendingReports, wap, fillRate };
+    return { totalUsers, newUsersToday, activeMatches, pendingReports, suspendedUsers, wap, fillRate };
+  }
+
+  recentActivity(limit = 20) {
+    return this.admin.listRecentActivity(limit);
+  }
+
+  async getUser(userId: string) {
+    const user = await this.admin.findUserById(userId);
+    if (!user) throw new ApiError(404, "NOT_FOUND", "User not found");
+    return user;
+  }
+
+  async getMatch(matchId: string) {
+    const match = await this.admin.findMatchById(matchId);
+    if (!match) throw new ApiError(404, "NOT_FOUND", "Match not found");
+    return match;
+  }
+
+  async getReport(reportId: string) {
+    const report = await this.reports.findById(reportId);
+    if (!report) throw new ApiError(404, "NOT_FOUND", "Report not found");
+    return report;
   }
 
   async sportsDistribution() {

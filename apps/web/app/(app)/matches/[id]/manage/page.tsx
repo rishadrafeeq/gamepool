@@ -16,8 +16,9 @@ import {
   useCancelMatch,
   useMatchInvites,
   useCreateInvite,
+  useMatch,
 } from "@/features/matches/hooks/use-matches";
-import { Input } from "@/components/ui/input";
+import { PlayerPicker } from "@/components/domain/player-picker";
 import { useState } from "react";
 
 type Props = { params: Promise<{ id: string }> };
@@ -32,6 +33,7 @@ export default function MatchManagePage({ params }: Props) {
   const cancel = useCancelMatch(id);
   const createInvite = useCreateInvite(id);
   const [inviteeId, setInviteeId] = useState("");
+  const { data: match } = useMatch(id);
 
   if (loadingRoster) return <Skeleton className="m-4 h-40" />;
 
@@ -84,13 +86,21 @@ export default function MatchManagePage({ params }: Props) {
 
         <section className="space-y-2">
           <h3 className="font-semibold">Send invite</h3>
-          <Input placeholder="Invitee user ID" value={inviteeId} onChange={(e) => setInviteeId(e.target.value)} />
+          <PlayerPicker
+            value={inviteeId}
+            onChange={setInviteeId}
+            city={match?.city}
+            sportId={match?.sportId}
+          />
           <Button
             className="w-full"
             onClick={() =>
               createInvite
                 .mutateAsync({ inviteeUserId: inviteeId })
-                .then(() => toast.success("Invite sent"))
+                .then(() => {
+                  toast.success("Invite sent");
+                  setInviteeId("");
+                })
                 .catch(() => toast.error("Invite failed"))
             }
             disabled={!inviteeId}

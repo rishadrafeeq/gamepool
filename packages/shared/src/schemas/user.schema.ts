@@ -53,6 +53,9 @@ export const playerSearchSchema = paginationSchema.extend({
   city: z.string().max(100).optional(),
   area: z.string().max(100).optional(),
   q: z.string().max(100).optional(),
+  radiusKm: z.coerce.number().min(1).max(200).optional(),
+  latitude: z.coerce.number().min(-90).max(90).optional(),
+  longitude: z.coerce.number().min(-180).max(180).optional(),
 });
 
 export type BootstrapBody = z.infer<typeof bootstrapBodySchema>;

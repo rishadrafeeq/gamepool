@@ -18,16 +18,22 @@ enum UserStatus {
   ACTIVE
   SUSPENDED
   DEACTIVATED
+
+  @@map("user_status")
 }
 
 enum ProfileVisibility {
   PUBLIC
   CONNECTIONS_ONLY
+
+  @@map("profile_visibility")
 }
 
 enum OtpChannel {
   EMAIL
   PHONE
+
+  @@map("otp_channel")
 }
 
 enum OtpPurpose {
@@ -36,6 +42,8 @@ enum OtpPurpose {
   VERIFY_EMAIL
   VERIFY_PHONE
   PASSWORD_RESET
+
+  @@map("otp_purpose")
 }
 
 enum SkillLevel {
@@ -43,6 +51,8 @@ enum SkillLevel {
   INTERMEDIATE
   ADVANCED
   PROFESSIONAL
+
+  @@map("skill_level")
 }
 
 enum DayOfWeek {
@@ -53,6 +63,8 @@ enum DayOfWeek {
   FRIDAY
   SATURDAY
   SUNDAY
+
+  @@map("day_of_week")
 }
 
 enum MatchJoinRequestStatus {
@@ -60,6 +72,8 @@ enum MatchJoinRequestStatus {
   APPROVED
   DECLINED
   CANCELLED
+
+  @@map("match_join_request_status")
 }
 
 enum MatchStatus {
@@ -69,12 +83,16 @@ enum MatchStatus {
   IN_PROGRESS
   COMPLETED
   CANCELLED
+
+  @@map("match_status")
 }
 
 enum MatchVisibility {
   PUBLIC
   CONNECTIONS_ONLY
   INVITE_ONLY
+
+  @@map("match_visibility")
 }
 
 enum VenueSource {
@@ -82,11 +100,15 @@ enum VenueSource {
   MARKETPLACE
   PARTNER
   VERIFIED
+
+  @@map("venue_source")
 }
 
 enum ParticipantRole {
   HOST
   PARTICIPANT
+
+  @@map("participant_role")
 }
 
 enum ParticipantStatus {
@@ -96,6 +118,8 @@ enum ParticipantStatus {
   DECLINED
   REMOVED
   LEFT
+
+  @@map("participant_status")
 }
 
 enum SportsConnectionStatus {
@@ -103,12 +127,16 @@ enum SportsConnectionStatus {
   ACCEPTED
   DECLINED
   BLOCKED
+
+  @@map("sports_connection_status")
 }
 
 enum TeammateRequestStatus {
   OPEN
   CLOSED
   EXPIRED
+
+  @@map("teammate_request_status")
 }
 
 enum OpponentRequestStatus {
@@ -116,12 +144,16 @@ enum OpponentRequestStatus {
   MATCHED
   CLOSED
   EXPIRED
+
+  @@map("opponent_request_status")
 }
 
 enum RequestInterestStatus {
   PENDING
   APPROVED
   DECLINED
+
+  @@map("request_interest_status")
 }
 
 enum MatchInviteStatus {
@@ -130,6 +162,8 @@ enum MatchInviteStatus {
   DECLINED
   EXPIRED
   REVOKED
+
+  @@map("match_invite_status")
 }
 
 enum ReportReason {
@@ -139,6 +173,8 @@ enum ReportReason {
   SPAM
   INAPPROPRIATE_CONTENT
   OTHER
+
+  @@map("report_reason")
 }
 
 enum ReportStatus {
@@ -146,17 +182,23 @@ enum ReportStatus {
   UNDER_REVIEW
   RESOLVED
   DISMISSED
+
+  @@map("report_status")
 }
 
 enum AdminRole {
   SUPER_ADMIN
   MODERATOR
   SUPPORT
+
+  @@map("admin_role")
 }
 
 enum AdminStatus {
   ACTIVE
   DISABLED
+
+  @@map("admin_status")
 }
 
 enum NotificationType {
@@ -184,6 +226,8 @@ enum NotificationType {
   REPORT_STATUS_UPDATED
   WELCOME
   SYSTEM
+
+  @@map("notification_type")
 }
 
 enum NotificationEntityType {
@@ -195,6 +239,8 @@ enum NotificationEntityType {
   MATCH_INVITE
   REPORT
   SYSTEM
+
+  @@map("notification_entity_type")
 }
 
 // ─── Models ──────────────────────────────────────────────────────────────────

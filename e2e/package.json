@@ -1,0 +1,11 @@
+{
+  "name": "@gamepool/e2e",
+  "private": true,
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.1",
+    "dotenv": "^16.4.7"
+  }
+}

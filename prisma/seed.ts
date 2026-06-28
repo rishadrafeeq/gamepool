@@ -53,10 +53,22 @@ async function seedSports() {
 async function seedAdmin() {
   const email = process.env.SEED_ADMIN_EMAIL;
   const password = process.env.SEED_ADMIN_PASSWORD;
+  const nodeEnv = process.env.NODE_ENV ?? "development";
 
   if (!email || !password) {
     console.log("Skipping admin seed (SEED_ADMIN_EMAIL / SEED_ADMIN_PASSWORD not set)");
     return;
+  }
+
+  const weakPasswords = ["changeme", "change-me", "password", "admin"];
+  if (nodeEnv === "production") {
+    if (process.env.ADMIN_ALLOW_SEED !== "true") {
+      console.log("Skipping admin seed in production (set ADMIN_ALLOW_SEED=true to override)");
+      return;
+    }
+    if (password.length < 16 || weakPasswords.includes(password.toLowerCase())) {
+      throw new Error("Refusing to seed admin in production with a weak password");
+    }
   }
 
   const passwordHash = await bcrypt.hash(password, 12);

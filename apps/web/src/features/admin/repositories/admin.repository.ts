@@ -25,6 +25,54 @@ export class AdminRepository {
     return prisma.report.count({ where: { status: { in: ["OPEN", "UNDER_REVIEW"] } } });
   }
 
+  countTotalUsers() {
+    return prisma.user.count({ where: { deletedAt: null } });
+  }
+
+  countSuspendedUsers() {
+    return prisma.user.count({ where: { deletedAt: null, status: "SUSPENDED" } });
+  }
+
+  listRecentActivity(take = 20) {
+    return prisma.adminAuditEvent.findMany({
+      take,
+      orderBy: { createdAt: "desc" },
+      include: { adminUser: { select: { email: true, displayName: true } } },
+    });
+  }
+
+  findUserById(id: string) {
+    return prisma.user.findFirst({
+      where: { id, deletedAt: null },
+      include: {
+        profile: true,
+        userSports: { where: { deletedAt: null }, include: { sport: true } },
+        _count: {
+          select: {
+            hostedMatches: true,
+            matchParticipations: true,
+            reportsFiled: true,
+          },
+        },
+      },
+    });
+  }
+
+  findMatchById(id: string) {
+    return prisma.match.findFirst({
+      where: { id, deletedAt: null },
+      include: {
+        sport: true,
+        host: { include: { profile: true } },
+        participants: {
+          where: { deletedAt: null },
+          include: { user: { include: { profile: true } } },
+        },
+        _count: { select: { reports: true } },
+      },
+    });
+  }
+
   async weeklyActivePlayers() {
     const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     const participants = await prisma.matchParticipant.findMany({

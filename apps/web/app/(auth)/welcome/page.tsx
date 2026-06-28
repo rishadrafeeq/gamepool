@@ -33,6 +33,15 @@ export default function WelcomePage() {
           <Link href="/sign-in">Sign in</Link>
         </Button>
       </div>
+      <p className="text-center text-xs text-muted-foreground">
+        <Link href="/privacy" className="underline">
+          Privacy
+        </Link>
+        {" · "}
+        <Link href="/terms" className="underline">
+          Terms
+        </Link>
+      </p>
     </main>
   );
 }

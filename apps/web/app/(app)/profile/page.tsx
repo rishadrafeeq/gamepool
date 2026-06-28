@@ -1,5 +1,6 @@
 "use client";
 
+import { format } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -48,9 +49,32 @@ export default function ProfilePage() {
               <p className="text-sm text-muted-foreground">
                 {[user?.profile?.city, user?.profile?.area].filter(Boolean).join(", ")}
               </p>
+              {user?.stats?.memberSince && (
+                <p className="text-xs text-muted-foreground">
+                  Member since {format(new Date(user.stats.memberSince), "MMM yyyy")}
+                </p>
+              )}
             </div>
           </CardContent>
         </Card>
+
+        {user?.stats && (
+          <div className="grid grid-cols-2 gap-3">
+            <Card>
+              <CardContent className="p-4 text-center">
+                <p className="text-2xl font-bold">{user.stats.matchesJoined}</p>
+                <p className="text-xs text-muted-foreground">Matches joined</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-4 text-center">
+                <p className="text-2xl font-bold">{user.stats.matchesHosted}</p>
+                <p className="text-xs text-muted-foreground">Matches hosted</p>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
         <div className="flex flex-wrap gap-2">
           {user?.userSports?.map((us) => (
             <SportBadge key={us.id} sport={us.sport} skill={us.skillLevel} />

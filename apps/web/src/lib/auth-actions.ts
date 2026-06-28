@@ -18,7 +18,8 @@ export async function signUpWithEmail(email: string, password: string, displayNa
   }
   const credential = await createUserWithEmailAndPassword(getFirebaseAuth(), email, password);
   await sendEmailVerification(credential.user);
-  await bootstrapUser({ displayName });
+  const idToken = await credential.user.getIdToken();
+  await bootstrapUser({ displayName }, idToken);
   return credential.user;
 }
 
@@ -27,14 +28,25 @@ export async function signInWithEmail(email: string, password: string) {
     throw new Error("Firebase is not configured");
   }
   const credential = await signInWithEmailAndPassword(getFirebaseAuth(), email, password);
-  await bootstrapUser();
+  const idToken = await credential.user.getIdToken();
+  await bootstrapUser(undefined, idToken);
   return credential.user;
 }
 
-export async function bootstrapUser(body?: { displayName?: string; city?: string }) {
+export async function bootstrapUser(
+  body?: { displayName?: string; city?: string },
+  idToken?: string,
+) {
+  const headers: HeadersInit = {};
+  if (idToken) {
+    headers.Authorization = `Bearer ${idToken}`;
+  }
+
   const res = await apiFetch<User>("/api/v1/auth/bootstrap", {
     method: "POST",
     body: JSON.stringify(body ?? {}),
+    headers,
+    auth: !idToken,
   });
   return res.data;
 }

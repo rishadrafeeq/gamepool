@@ -211,6 +211,18 @@ export class MatchJoinService {
       throw new ApiError(400, "INVALID_REQUEST", "Host cannot leave; cancel match instead");
     }
 
+    if (participant.status === "CONFIRMED" && match.leaveCutoffHours > 0) {
+      const cutoffMs = match.leaveCutoffHours * 60 * 60 * 1000;
+      const msUntilStart = match.startsAt.getTime() - Date.now();
+      if (msUntilStart < cutoffMs) {
+        throw new ApiError(
+          400,
+          "LEAVE_CUTOFF_PASSED",
+          `Cannot leave within ${match.leaveCutoffHours} hours of start time`,
+        );
+      }
+    }
+
     return prisma.$transaction(async (tx) => {
       await tx.matchParticipant.update({
         where: { id: participant.id },

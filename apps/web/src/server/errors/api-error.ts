@@ -3,6 +3,8 @@ import { ZodError } from "zod";
 import { error } from "@gamepool/shared";
 import { NextResponse } from "next/server";
 
+import { logError } from "@/server/logging/logger";
+
 export class ApiError extends Error {
   constructor(
     public readonly status: number,
@@ -46,7 +48,7 @@ export function jsonError(
   return NextResponse.json(error(code, message, details), { status });
 }
 
-export function handleApiError(err: unknown) {
+export function handleApiError(err: unknown, context?: { requestId?: string; path?: string }) {
   if (err instanceof ApiError) {
     return jsonError(err.status, err.code, err.message, err.details);
   }
@@ -55,6 +57,11 @@ export function handleApiError(err: unknown) {
     return jsonError(400, "VALIDATION_ERROR", "Invalid request", err.flatten());
   }
 
-  console.error(err);
+  logError({
+    message: "unhandled_api_error",
+    error: err,
+    requestId: context?.requestId,
+    path: context?.path,
+  });
   return jsonError(500, "INTERNAL_ERROR", "An unexpected error occurred");
 }

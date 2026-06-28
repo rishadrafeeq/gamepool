@@ -5,7 +5,7 @@ import type { UpdateProfileBody, ReplaceUserSportsBody, ReplaceAvailabilityBody 
 
 import { apiFetch } from "@/lib/api-client";
 import { queryKeys } from "@/lib/query-keys";
-import type { User, AvailabilityWindow, UserSport } from "@/types";
+import type { User, AvailabilityWindow, UserSport, PlayerSearchResult } from "@/types";
 
 export function useUpdateProfile() {
   const qc = useQueryClient();
@@ -76,7 +76,7 @@ export function usePlayers(filters: Record<string, string | number | undefined>)
   return useQuery({
     queryKey: queryKeys.players(filters),
     queryFn: async () => {
-      const res = await apiFetch<User[]>(`/api/v1/players?${params}`);
+      const res = await apiFetch<PlayerSearchResult[]>(`/api/v1/players?${params}`);
       return { items: res.data, meta: res.meta };
     },
   });
