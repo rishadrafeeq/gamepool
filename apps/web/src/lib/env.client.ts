@@ -27,11 +27,8 @@ export const clientEnv: ClientEnv = clientEnvSchema.parse({
   NEXT_PUBLIC_FIREBASE_VAPID_KEY: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
 });
 
+import { isFirebaseClientConfigured as isConfigured } from "@/lib/firebase/runtime-config";
+
 export function isFirebaseClientConfigured(): boolean {
-  return Boolean(
-    clientEnv.NEXT_PUBLIC_FIREBASE_API_KEY &&
-      clientEnv.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN &&
-      clientEnv.NEXT_PUBLIC_FIREBASE_PROJECT_ID &&
-      clientEnv.NEXT_PUBLIC_FIREBASE_APP_ID,
-  );
+  return isConfigured();
 }

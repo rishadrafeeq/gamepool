@@ -4,8 +4,7 @@ import { type FirebaseApp, getApp, getApps, initializeApp } from "firebase/app";
 import { type Auth, getAuth } from "firebase/auth";
 import { type FirebaseStorage, getStorage } from "firebase/storage";
 
-import { isFirebaseClientConfigured } from "@/lib/env.client";
-import { firebaseClientConfig } from "@/lib/firebase/config";
+import { getFirebaseRuntimeConfig, isFirebaseClientConfigured } from "@/lib/firebase/runtime-config";
 
 let app: FirebaseApp | undefined;
 let auth: Auth | undefined;
@@ -17,7 +16,7 @@ export function getFirebaseApp(): FirebaseApp {
   }
 
   if (!app) {
-    app = getApps().length > 0 ? getApp() : initializeApp(firebaseClientConfig);
+    app = getApps().length > 0 ? getApp() : initializeApp(getFirebaseRuntimeConfig());
   }
 
   return app;

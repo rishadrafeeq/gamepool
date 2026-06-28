@@ -1,10 +1,13 @@
-import { clientEnv } from "@/lib/env.client";
+import type { FirebaseClientConfig } from "@/lib/firebase/types";
+import { getFirebaseRuntimeConfig } from "@/lib/firebase/runtime-config";
 
-export const firebaseClientConfig = {
-  apiKey: clientEnv.NEXT_PUBLIC_FIREBASE_API_KEY ?? "",
-  authDomain: clientEnv.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ?? "",
-  projectId: clientEnv.NEXT_PUBLIC_FIREBASE_PROJECT_ID ?? "",
-  storageBucket: clientEnv.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ?? "",
-  messagingSenderId: clientEnv.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID ?? "",
-  appId: clientEnv.NEXT_PUBLIC_FIREBASE_APP_ID ?? "",
-};
+export function getFirebaseClientConfig(): FirebaseClientConfig {
+  return getFirebaseRuntimeConfig();
+}
+
+/** @deprecated Use getFirebaseClientConfig() */
+export const firebaseClientConfig = new Proxy({} as FirebaseClientConfig, {
+  get(_target, prop: keyof FirebaseClientConfig) {
+    return getFirebaseRuntimeConfig()[prop];
+  },
+});

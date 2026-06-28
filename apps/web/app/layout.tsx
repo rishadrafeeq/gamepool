@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 
 import { AppProviders } from "@/components/app-providers";
+import { getServerFirebaseClientConfig } from "@/lib/firebase/server-config";
 import "./globals.css";
 
 const inter = Inter({
@@ -31,10 +32,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const firebaseConfig = getServerFirebaseClientConfig();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} min-h-screen font-sans`}>
-        <AppProviders>{children}</AppProviders>
+        <AppProviders firebaseConfig={firebaseConfig}>{children}</AppProviders>
       </body>
     </html>
   );
