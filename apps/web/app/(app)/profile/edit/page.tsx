@@ -7,6 +7,7 @@ import { updateProfileSchema } from "@gamepool/shared";
 import { z } from "zod";
 import { toast } from "sonner";
 
+import { AvatarUpload } from "@/components/domain/avatar-upload";
 import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,14 +37,17 @@ export default function EditProfilePage() {
       bio: user?.profile?.bio ?? "",
       city: user?.profile?.city ?? "",
       area: user?.profile?.area ?? "",
-      avatarUrl: user?.profile?.avatarUrl ?? "",
+      avatarUrl: user?.profile?.avatarUrl ?? null,
       profileVisibility: user?.profile?.profileVisibility ?? "PUBLIC",
     },
   });
 
   async function onSubmit(values: FormValues) {
     try {
-      await updateProfile.mutateAsync(values);
+      await updateProfile.mutateAsync({
+        ...values,
+        avatarUrl: values.avatarUrl || null,
+      });
       toast.success("Profile updated");
       router.push("/profile");
     } catch {
@@ -55,6 +59,11 @@ export default function EditProfilePage() {
     <>
       <PageHeader title="Edit profile" backHref="/profile" />
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-4">
+        <AvatarUpload
+          displayName={form.watch("displayName") || "Player"}
+          value={form.watch("avatarUrl")}
+          onChange={(url) => form.setValue("avatarUrl", url)}
+        />
         <div className="space-y-2">
           <Label>Display name</Label>
           <Input {...form.register("displayName")} />
@@ -62,10 +71,6 @@ export default function EditProfilePage() {
         <div className="space-y-2">
           <Label>Bio</Label>
           <Textarea {...form.register("bio")} />
-        </div>
-        <div className="space-y-2">
-          <Label>Avatar URL</Label>
-          <Input {...form.register("avatarUrl")} />
         </div>
         <div className="space-y-2">
           <Label>City</Label>
