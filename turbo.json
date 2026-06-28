@@ -29,6 +29,13 @@
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
+    "@gamepool/database#build": {
+      "cache": false,
+      "outputs": []
+    },
+    "@gamepool/shared#build": {
+      "outputs": []
+    },
     "dev": {
       "cache": false,
       "persistent": true

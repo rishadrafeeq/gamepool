@@ -196,6 +196,9 @@ importers:
       '@gamepool/config':
         specifier: workspace:*
         version: link:../config
+      prisma:
+        specifier: ^5.22.0
+        version: 5.22.0
       typescript:
         specifier: ^5.7.2
         version: 5.9.3
