@@ -35,12 +35,21 @@ All must pass before merging to `main`.
 | `DATABASE_URL` | Pooled connection string |
 | `DIRECT_URL` | Direct URL for migrations |
 | `NODE_ENV` | `production` |
-| `NEXT_PUBLIC_APP_URL` | `https://your-domain.com` |
-| `NEXT_PUBLIC_FIREBASE_*` | All 6 client Firebase vars |
-| `FIREBASE_PROJECT_ID` | Service account |
-| `FIREBASE_CLIENT_EMAIL` | Service account |
-| `FIREBASE_PRIVATE_KEY` | Escape newlines as `\n` |
+| `NEXT_PUBLIC_APP_URL` | `https://your-app.vercel.app` or custom domain |
+| `NEXT_PUBLIC_FIREBASE_API_KEY` | Firebase web app config |
+| `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN` | e.g. `gamepool-2e791.firebaseapp.com` |
+| `NEXT_PUBLIC_FIREBASE_PROJECT_ID` | e.g. `gamepool-2e791` |
+| `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET` | e.g. `gamepool-2e791.firebasestorage.app` |
+| `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` | Numeric sender ID |
+| `NEXT_PUBLIC_FIREBASE_APP_ID` | Web app ID |
+| `FIREBASE_PROJECT_ID` | Service account (same project) |
+| `FIREBASE_CLIENT_EMAIL` | Service account email |
+| `FIREBASE_PRIVATE_KEY` | Paste key with `\n` for newlines |
 | `ADMIN_JWT_SECRET` | Min 32 random characters |
+
+> **Important:** `NEXT_PUBLIC_*` variables are baked into the client bundle at **build time**. After adding or changing them in Vercel, you must **Redeploy** (use “Redeploy” → check “Clear build cache” if sign-in still shows “Firebase is not configured”).
+
+Copy values from your local `.env` (the same ones that work on localhost). Do not commit `.env` to GitHub.
 
 ### Strongly recommended
 
