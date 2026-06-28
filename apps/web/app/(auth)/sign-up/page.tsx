@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -9,15 +10,26 @@ import { z } from "zod";
 import { toast } from "sonner";
 
 import { AuthMethodTabs } from "@/components/auth/auth-method-tabs";
-import { PhoneAuthForm } from "@/components/auth/phone-auth-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import { signUpWithEmail, isProfileComplete } from "@/lib/auth-actions";
 import { getAuthErrorMessage } from "@/lib/auth-error-message";
 import { isFirebaseClientConfigured } from "@/lib/env.client";
 import { apiFetch } from "@/lib/api-client";
 import type { User } from "@/types";
+
+const PhoneAuthForm = dynamic(
+  () =>
+    import("@/components/auth/phone-auth-form").then((m) => ({
+      default: m.PhoneAuthForm,
+    })),
+  {
+    loading: () => <Skeleton className="h-32 w-full" />,
+    ssr: false,
+  },
+);
 
 const schema = z.object({
   displayName: z.string().min(2).max(100),

@@ -17,8 +17,8 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   useAuthListener();
   const router = useRouter();
   const pathname = usePathname();
-  const { firebaseUid, isInitialized } = useAuthStore();
-  const { data: user, isLoading } = useMe(Boolean(firebaseUid));
+  const { firebaseUid, user, isInitialized } = useAuthStore();
+  const { isLoading } = useMe(Boolean(firebaseUid) && !user);
 
   useEffect(() => {
     if (!isInitialized) return;
@@ -43,7 +43,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     }
   }, [firebaseUid, isInitialized, pathname, router, user]);
 
-  if (!isInitialized || (firebaseUid && isLoading)) {
+  if (!isInitialized || (firebaseUid && !user && isLoading)) {
     return (
       <div className="space-y-4 p-4">
         <Skeleton className="h-8 w-48" />

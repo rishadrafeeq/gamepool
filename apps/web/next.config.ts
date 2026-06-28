@@ -24,6 +24,16 @@ assertProductionFirebaseEnv();
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@gamepool/database", "@gamepool/shared"],
+  experimental: {
+    optimizePackageImports: [
+      "lucide-react",
+      "date-fns",
+      "@radix-ui/react-dialog",
+      "@radix-ui/react-select",
+      "@radix-ui/react-tabs",
+      "@radix-ui/react-avatar",
+    ],
+  },
   images: {
     remotePatterns: [
       {
