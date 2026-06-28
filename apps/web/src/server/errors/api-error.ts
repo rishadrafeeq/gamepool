@@ -57,6 +57,20 @@ export function handleApiError(err: unknown, context?: { requestId?: string; pat
     return jsonError(400, "VALIDATION_ERROR", "Invalid request", err.flatten());
   }
 
+  if (isPrismaConnectionError(err)) {
+    logError({
+      message: "database_connection_error",
+      error: err,
+      requestId: context?.requestId,
+      path: context?.path,
+    });
+    return jsonError(
+      503,
+      "DATABASE_UNAVAILABLE",
+      "Database connection failed. Check DATABASE_URL on Vercel and run migrations.",
+    );
+  }
+
   logError({
     message: "unhandled_api_error",
     error: err,
@@ -64,4 +78,15 @@ export function handleApiError(err: unknown, context?: { requestId?: string; pat
     path: context?.path,
   });
   return jsonError(500, "INTERNAL_ERROR", "An unexpected error occurred");
+}
+
+function isPrismaConnectionError(err: unknown): boolean {
+  if (!err || typeof err !== "object") return false;
+  const e = err as { code?: string; name?: string; message?: string };
+  return (
+    e.code === "P1001" ||
+    e.code === "P1012" ||
+    e.name === "PrismaClientInitializationError" ||
+    Boolean(e.message?.includes("Can't reach database server"))
+  );
 }

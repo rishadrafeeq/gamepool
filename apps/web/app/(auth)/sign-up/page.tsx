@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signUpWithEmail, isProfileComplete } from "@/lib/auth-actions";
+import { getAuthErrorMessage } from "@/lib/auth-error-message";
 import { isFirebaseClientConfigured } from "@/lib/env.client";
 import { apiFetch } from "@/lib/api-client";
 import type { User } from "@/types";
@@ -53,7 +54,7 @@ export default function SignUpPage() {
       toast.success("Account created. Verify your email.");
       router.push("/verify");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Sign up failed");
+      toast.error(getAuthErrorMessage(err, "Sign up failed"));
     }
   }
 

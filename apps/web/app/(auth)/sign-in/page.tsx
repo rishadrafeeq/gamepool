@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signInWithEmail, isProfileComplete } from "@/lib/auth-actions";
+import { getAuthErrorMessage } from "@/lib/auth-error-message";
 import { isFirebaseClientConfigured } from "@/lib/env.client";
 import { apiFetch } from "@/lib/api-client";
 import type { User } from "@/types";
@@ -45,7 +46,7 @@ export default function SignInPage() {
       await signInWithEmail(values.email, values.password);
       await afterAuth();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Sign in failed");
+      toast.error(getAuthErrorMessage(err, "Sign in failed"));
     }
   }
 
