@@ -8,6 +8,7 @@
   },
   "scripts": {
     "postinstall": "prisma generate",
+    "vercel-build": "prisma generate && turbo run build --filter=@gamepool/web --force",
     "dev": "turbo dev",
     "build": "prisma generate && turbo build",
     "lint": "turbo lint",

@@ -98,12 +98,12 @@ Never rely on `db:seed` for production admin accounts.
 |---------|-------|
 | **Root Directory** | `apps/web` (recommended) |
 | **Framework** | Next.js |
-| **Build Command** | Leave empty (uses `apps/web/vercel.json`) or `cd ../.. && pnpm db:generate && pnpm --filter @gamepool/web run build` |
+| **Build Command** | `pnpm run vercel-build` (or leave empty to use `apps/web/vercel.json`) |
 | **Install Command** | `cd ../.. && pnpm install` |
 
-If the project root is the **repo root** instead, `vercel.json` at the repo root runs `pnpm db:generate` before the Turbo build.
+If Vercel still runs `turbo run build` from the dashboard override, clear the custom build command or set it to `pnpm run vercel-build` explicitly.
 
-> Prisma Client must be generated during install/build. The repo runs `prisma generate` in `postinstall`, in `@gamepool/database` build, and in `@gamepool/web` build to avoid Vercel cache issues.
+> Prisma Client must be generated during the build step on Vercel (not only at install). The `vercel-build` script runs `prisma generate` before `next build` and bypasses Turbo cache with `--force`.
 
 ### Automatic (recommended)
 

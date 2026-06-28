@@ -8,7 +8,7 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "build": "prisma generate --schema=../../prisma/schema.prisma",
+    "build": "node -e \"process.exit(0)\"",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -16,7 +16,6 @@
   },
   "devDependencies": {
     "@gamepool/config": "workspace:*",
-    "prisma": "^5.22.0",
     "typescript": "^5.7.2"
   }
 }

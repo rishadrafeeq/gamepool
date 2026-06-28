@@ -1,5 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "pnpm db:generate && turbo run build --filter=@gamepool/web",
+  "buildCommand": "pnpm vercel-build",
   "installCommand": "pnpm install"
 }

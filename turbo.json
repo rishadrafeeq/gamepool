@@ -24,9 +24,13 @@
     "UPSTASH_REDIS_REST_URL",
     "UPSTASH_REDIS_REST_TOKEN"
   ],
+  "globalDependencies": ["prisma/schema.prisma"],
   "tasks": {
+    "db:generate": {
+      "cache": false
+    },
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["//#db:generate", "^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "@gamepool/database#build": {
@@ -34,7 +38,13 @@
       "outputs": []
     },
     "@gamepool/shared#build": {
+      "cache": false,
       "outputs": []
+    },
+    "@gamepool/web#build": {
+      "dependsOn": ["//#db:generate", "^build"],
+      "cache": false,
+      "inputs": ["$TURBO_DEFAULT$", "../../prisma/schema.prisma"]
     },
     "dev": {
       "cache": false,
