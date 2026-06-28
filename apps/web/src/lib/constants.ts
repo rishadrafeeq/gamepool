@@ -1,4 +1,11 @@
-export const SKILL_LEVELS = ["BEGINNER", "INTERMEDIATE", "ADVANCED", "PROFESSIONAL"] as const;
+export const SKILL_LEVELS = ["BEGINNER", "INTERMEDIATE", "PROFESSIONAL"] as const;
+
+/** Shown in UI only — legacy profiles/matches may still use ADVANCED in the database */
+export const SKILL_LEVEL_OPTIONS = [
+  { value: "BEGINNER", label: "Beginner" },
+  { value: "INTERMEDIATE", label: "Intermediate" },
+  { value: "PROFESSIONAL", label: "Professional" },
+] as const;
 
 export const DAYS = [
   "MONDAY",

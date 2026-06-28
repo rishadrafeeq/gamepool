@@ -1,6 +1,6 @@
 "use client";
 
-import { SKILL_LEVELS } from "@/lib/constants";
+import { SKILL_LEVEL_OPTIONS, formatSkill } from "@/lib/constants";
 import {
   Select,
   SelectContent,
@@ -13,21 +13,30 @@ import type { SkillLevel } from "@/types";
 export function SkillLevelSelect({
   value,
   onChange,
+  allowAny = false,
 }: {
-  value: SkillLevel;
-  onChange: (v: SkillLevel) => void;
+  value: SkillLevel | "";
+  onChange: (v: SkillLevel | "") => void;
+  allowAny?: boolean;
 }) {
   return (
-    <Select value={value} onValueChange={(v) => onChange(v as SkillLevel)}>
+    <Select
+      value={value || (allowAny ? "ANY" : "INTERMEDIATE")}
+      onValueChange={(v) => onChange(v === "ANY" ? "" : (v as SkillLevel))}
+    >
       <SelectTrigger>
         <SelectValue placeholder="Skill level" />
       </SelectTrigger>
       <SelectContent>
-        {SKILL_LEVELS.map((level) => (
-          <SelectItem key={level} value={level}>
-            {level.charAt(0) + level.slice(1).toLowerCase()}
+        {allowAny && <SelectItem value="ANY">Any skill level</SelectItem>}
+        {SKILL_LEVEL_OPTIONS.map((level) => (
+          <SelectItem key={level.value} value={level.value}>
+            {level.label}
           </SelectItem>
         ))}
+        {value === "ADVANCED" && (
+          <SelectItem value="ADVANCED">{formatSkill("ADVANCED")} (legacy)</SelectItem>
+        )}
       </SelectContent>
     </Select>
   );

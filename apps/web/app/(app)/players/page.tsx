@@ -58,8 +58,9 @@ export default function PlayersPage() {
           <div className="space-y-2">
             <Label>Skill level</Label>
             <SkillLevelSelect
-              value={(skillLevel || "INTERMEDIATE") as SkillLevel}
+              value={skillLevel}
               onChange={(v) => setSkillLevel(v)}
+              allowAny
             />
             {skillLevel && (
               <button type="button" className="text-xs text-primary" onClick={() => setSkillLevel("")}>
