@@ -86,7 +86,7 @@ export type Match = {
   notes?: string | null;
   status: MatchStatus;
   visibility: MatchVisibility;
-  skillLevelExpected: SkillLevel;
+  skillLevelExpected?: SkillLevel | null;
   startsAt: string;
   endsAt?: string | null;
   venueName: string;

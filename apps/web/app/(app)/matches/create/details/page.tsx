@@ -31,7 +31,7 @@ export default function CreateMatchDetailsPage() {
         format: draft.format,
         notes: draft.notes,
         visibility: draft.visibility ?? "PUBLIC",
-        skillLevelExpected: draft.skillLevelExpected ?? "INTERMEDIATE",
+        skillLevelExpected: draft.skillLevelExpected ?? null,
         startsAt: draft.startsAt,
         endsAt: draft.endsAt,
         durationMinutes: draft.durationMinutes,

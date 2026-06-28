@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { format } from "date-fns";
 import { use, useState } from "react";
-import { MapPin, Settings, Users } from "lucide-react";
+import { MapPin, MessageCircle, Settings, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -21,7 +21,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useMatch, useLeaveMatch } from "@/features/matches/hooks/use-matches";
+import {
+  useMatch,
+  useLeaveMatch,
+  useJoinRequests,
+} from "@/features/matches/hooks/use-matches";
 import { useMe } from "@/features/users/hooks/use-me";
 
 type Props = { params: Promise<{ id: string }> };
@@ -31,13 +35,14 @@ export default function MatchDetailPage({ params }: Props) {
   const router = useRouter();
   const { data: match, isLoading } = useMatch(id);
   const { data: me } = useMe();
+  const isHost = Boolean(me?.id && match?.hostUserId === me.id);
+  const { data: pendingRequests } = useJoinRequests(id, isHost);
   const leave = useLeaveMatch(id);
   const [leaveOpen, setLeaveOpen] = useState(false);
 
   if (isLoading) return <Skeleton className="m-4 h-48" />;
   if (!match) return null;
 
-  const isHost = me?.id === match.hostUserId;
   const isFull = match.status === "FULL";
   const canJoin = ["OPEN", "FULL"].includes(match.status) && !isHost;
   const myParticipant = match.roster?.find(
@@ -47,6 +52,9 @@ export default function MatchDetailPage({ params }: Props) {
     myParticipant &&
     !isHost &&
     !["IN_PROGRESS", "COMPLETED", "CANCELLED"].includes(match.status);
+  const canChat =
+    !["DRAFT", "CANCELLED"].includes(match.status) &&
+    (isHost || myParticipant?.status === "CONFIRMED");
 
   async function confirmLeave() {
     try {
@@ -66,9 +74,14 @@ export default function MatchDetailPage({ params }: Props) {
         backHref="/home"
         action={
           isHost ? (
-            <Button size="sm" variant="outline" asChild>
+            <Button size="sm" variant="outline" asChild className="relative">
               <Link href={`/matches/${id}/manage`}>
                 <Settings className="h-4 w-4" />
+                {pendingRequests && pendingRequests.length > 0 && (
+                  <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] text-destructive-foreground">
+                    {pendingRequests.length}
+                  </span>
+                )}
               </Link>
             </Button>
           ) : undefined
@@ -112,6 +125,14 @@ export default function MatchDetailPage({ params }: Props) {
         <Button variant="outline" asChild className="w-full">
           <Link href={`/matches/${id}/participants`}>View roster</Link>
         </Button>
+        {canChat && (
+          <Button variant="outline" asChild className="w-full min-h-[44px]">
+            <Link href={`/matches/${id}/chat`}>
+              <MessageCircle className="mr-2 h-4 w-4" />
+              Team chat
+            </Link>
+          </Button>
+        )}
       </div>
 
       <Dialog open={leaveOpen} onOpenChange={setLeaveOpen}>

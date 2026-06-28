@@ -282,6 +282,7 @@ model User {
   availability               UserAvailability[]
   matchJoinRequests          MatchJoinRequest[]         @relation("MatchJoinRequester")
   matchJoinRequestsReviewed  MatchJoinRequest[]         @relation("MatchJoinReviewer")
+  matchChatMessages          MatchChatMessage[]
 
   @@index([status], map: "idx_users_status")
   @@index([firebaseUid], map: "idx_users_firebase_uid")
@@ -424,7 +425,7 @@ model Match {
   notes               String?         @db.Text
   status              MatchStatus     @default(DRAFT)
   visibility          MatchVisibility @default(PUBLIC)
-  skillLevelExpected  SkillLevel      @map("skill_level_expected")
+  skillLevelExpected  SkillLevel?     @map("skill_level_expected")
   startsAt            DateTime        @map("starts_at") @db.Timestamptz
   endsAt              DateTime?       @map("ends_at") @db.Timestamptz
   durationMinutes     Int?            @map("duration_minutes")
@@ -450,6 +451,7 @@ model Match {
   participants      MatchParticipant[]
   invites           MatchInvite[]
   joinRequests      MatchJoinRequest[]
+  chatMessages      MatchChatMessage[]
   teammateRequests  TeammateRequest[]
   opponentRequests  OpponentRequest[]
   reports           Report[]          @relation("ReportedMatch")
@@ -599,6 +601,20 @@ model MatchJoinRequest {
   @@index([matchId, status], map: "idx_match_join_requests_match_status")
   @@index([userId, status, createdAt(sort: Desc)], map: "idx_match_join_requests_user")
   @@map("match_join_requests")
+}
+
+model MatchChatMessage {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  matchId   String   @map("match_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  body      String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  match Match @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  @@index([matchId, createdAt], map: "idx_match_chat_messages_match_created")
+  @@map("match_chat_messages")
 }
 
 model MatchParticipant {

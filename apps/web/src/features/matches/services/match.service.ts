@@ -36,7 +36,7 @@ export class MatchService {
           notes: body.notes,
           status: "DRAFT",
           visibility: body.visibility,
-          skillLevelExpected: body.skillLevelExpected,
+          skillLevelExpected: body.skillLevelExpected ?? null,
           startsAt: new Date(body.startsAt),
           endsAt: body.endsAt ? new Date(body.endsAt) : null,
           durationMinutes: body.durationMinutes,

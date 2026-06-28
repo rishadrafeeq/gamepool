@@ -13,7 +13,7 @@ export const createMatchSchema = z.object({
   format: z.string().min(1).max(50),
   notes: z.string().max(2000).optional().nullable(),
   visibility: matchVisibilitySchema.default("PUBLIC"),
-  skillLevelExpected: skillLevelSchema,
+  skillLevelExpected: skillLevelSchema.optional().nullable(),
   startsAt: z.string().datetime(),
   endsAt: z.string().datetime().optional().nullable(),
   durationMinutes: z.number().int().min(15).max(480).optional().nullable(),
@@ -68,4 +68,8 @@ export const removeParticipantSchema = z.object({
 export type CreateMatchBody = z.output<typeof createMatchSchema>;
 export type UpdateMatchBody = z.infer<typeof updateMatchSchema>;
 export type ListMatchesQuery = z.output<typeof listMatchesSchema>;
-export type CreateMatchInviteBody = z.infer<typeof createMatchInviteSchema>;
+export const createMatchChatMessageSchema = z.object({
+  body: z.string().min(1).max(2000),
+});
+
+export type CreateMatchChatMessageBody = z.infer<typeof createMatchChatMessageSchema>;

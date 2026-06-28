@@ -15,14 +15,16 @@ export function SkillLevelSelect({
   onChange,
   allowAny = false,
 }: {
-  value: SkillLevel | "";
-  onChange: (v: SkillLevel | "") => void;
+  value: SkillLevel | null;
+  onChange: (v: SkillLevel | null) => void;
   allowAny?: boolean;
 }) {
+  const selectValue = value ?? (allowAny ? "ANY" : "INTERMEDIATE");
+
   return (
     <Select
-      value={value || (allowAny ? "ANY" : "INTERMEDIATE")}
-      onValueChange={(v) => onChange(v === "ANY" ? "" : (v as SkillLevel))}
+      value={selectValue}
+      onValueChange={(v) => onChange(v === "ANY" ? null : (v as SkillLevel))}
     >
       <SelectTrigger>
         <SelectValue placeholder="Skill level" />

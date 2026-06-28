@@ -9,7 +9,7 @@ export type CreateMatchDraft = {
   format: string;
   notes?: string;
   visibility: MatchVisibility;
-  skillLevelExpected: SkillLevel;
+  skillLevelExpected?: SkillLevel | null;
   startsAt: string;
   endsAt?: string;
   durationMinutes?: number;
@@ -35,7 +35,7 @@ type CreateMatchStore = {
 
 const initialDraft: Partial<CreateMatchDraft> = {
   visibility: "PUBLIC",
-  skillLevelExpected: "INTERMEDIATE",
+  skillLevelExpected: null,
   maxParticipants: 10,
   waitlistEnabled: true,
   leaveCutoffHours: 2,

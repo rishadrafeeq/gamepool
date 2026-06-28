@@ -4,6 +4,8 @@ import { use } from "react";
 import { toast } from "sonner";
 
 import { PageHeader } from "@/components/layout/page-header";
+import { JoinRequestCard } from "@/components/domain/join-request-card";
+import { PlayerPicker } from "@/components/domain/player-picker";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,7 +20,6 @@ import {
   useCreateInvite,
   useMatch,
 } from "@/features/matches/hooks/use-matches";
-import { PlayerPicker } from "@/components/domain/player-picker";
 import { useState } from "react";
 
 type Props = { params: Promise<{ id: string }> };
@@ -54,33 +55,31 @@ export default function MatchManagePage({ params }: Props) {
         </section>
 
         <section className="space-y-2">
-          <h3 className="font-semibold">Join requests</h3>
+          <h3 className="font-semibold">
+            Join requests {requests && requests.length > 0 ? `(${requests.length})` : ""}
+          </h3>
+          <p className="text-xs text-muted-foreground">
+            Review who asked to join. Accept adds them to the roster; reject declines the request.
+          </p>
           {requests?.length === 0 && <p className="text-sm text-muted-foreground">No pending requests</p>}
           {requests?.map((req) => (
-            <Card key={req.id}>
-              <CardContent className="flex items-center justify-between gap-2 p-3">
-                <span className="text-sm">{req.user?.profile?.displayName ?? "Player"}</span>
-                <div className="flex gap-2">
-                  <Button
-                    size="sm"
-                    onClick={() =>
-                      review.mutateAsync({ requestId: req.id, action: "APPROVE" }).then(() => toast.success("Approved"))
-                    }
-                  >
-                    Approve
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() =>
-                      review.mutateAsync({ requestId: req.id, action: "DECLINE" }).then(() => toast.success("Declined"))
-                    }
-                  >
-                    Decline
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <JoinRequestCard
+              key={req.id}
+              request={req}
+              busy={review.isPending}
+              onAccept={() =>
+                review
+                  .mutateAsync({ requestId: req.id, action: "APPROVE" })
+                  .then(() => toast.success("Player accepted"))
+                  .catch(() => toast.error("Could not accept"))
+              }
+              onReject={() =>
+                review
+                  .mutateAsync({ requestId: req.id, action: "DECLINE" })
+                  .then(() => toast.success("Request rejected"))
+                  .catch(() => toast.error("Could not reject"))
+              }
+            />
           ))}
         </section>
 
@@ -113,7 +112,7 @@ export default function MatchManagePage({ params }: Props) {
         </section>
 
         <section className="space-y-2">
-          <h3 className="font-semibold">Roster</h3>
+          <h3 className="font-semibold">Roster ({participants?.length ?? 0})</h3>
           {participants?.map((p) => {
             const name = p.user?.profile?.displayName ?? "Player";
             return (
@@ -125,7 +124,9 @@ export default function MatchManagePage({ params }: Props) {
                   </Avatar>
                   <div>
                     <p className="text-sm font-medium">{name}</p>
-                    <p className="text-xs text-muted-foreground">{p.status}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {p.role} · {p.status}
+                    </p>
                   </div>
                 </CardContent>
               </Card>

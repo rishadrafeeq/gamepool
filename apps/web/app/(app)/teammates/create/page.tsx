@@ -69,7 +69,7 @@ export default function CreateTeammatePage() {
           <Label>Skill level</Label>
           <SkillLevelSelect
             value={form.watch("skillLevel") as SkillLevel}
-            onChange={(v) => form.setValue("skillLevel", v)}
+            onChange={(v) => form.setValue("skillLevel", v ?? "INTERMEDIATE")}
           />
         </div>
         <div className="space-y-2">

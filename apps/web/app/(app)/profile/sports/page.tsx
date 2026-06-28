@@ -63,7 +63,7 @@ export default function ProfileSportsPage() {
                 {active && (
                   <SkillLevelSelect
                     value={merged[sport.id] ?? "INTERMEDIATE"}
-                    onChange={(v) => setSelected((p) => ({ ...p, [sport.id]: v }))}
+                    onChange={(v) => v && setSelected((p) => ({ ...p, [sport.id]: v }))}
                   />
                 )}
               </CardContent>

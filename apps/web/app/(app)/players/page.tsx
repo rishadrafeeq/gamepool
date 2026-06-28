@@ -18,13 +18,13 @@ export default function PlayersPage() {
   const { data: me } = useMe();
   const [city, setCity] = useState(me?.profile?.city ?? "");
   const [sportId, setSportId] = useState("");
-  const [skillLevel, setSkillLevel] = useState<SkillLevel | "">("");
+  const [skillLevel, setSkillLevel] = useState<SkillLevel | null>(null);
   const [radiusKm, setRadiusKm] = useState("");
   const { data: sports } = useSports();
   const { data, isLoading } = usePlayers({
     city: city || undefined,
     sportId: sportId || undefined,
-    skillLevel: skillLevel || undefined,
+    skillLevel: skillLevel ?? undefined,
     radiusKm: radiusKm || undefined,
     page: 1,
     limit: 20,

@@ -56,8 +56,9 @@ export default function CreateMatchStep1Page() {
         <div className="space-y-2">
           <Label>Skill level</Label>
           <SkillLevelSelect
-            value={(draft.skillLevelExpected ?? "INTERMEDIATE") as SkillLevel}
+            value={draft.skillLevelExpected ?? null}
             onChange={(v) => setDraft({ skillLevelExpected: v })}
+            allowAny
           />
         </div>
         <Button className="w-full min-h-[44px]" onClick={next}>

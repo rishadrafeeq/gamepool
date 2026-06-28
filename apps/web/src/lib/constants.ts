@@ -27,6 +27,11 @@ export function formatSkill(level: string) {
   return level.charAt(0) + level.slice(1).toLowerCase();
 }
 
+export function formatMatchSkill(level: string | null | undefined) {
+  if (!level) return "Any skill level";
+  return formatSkill(level);
+}
+
 export function formatDay(day: string) {
   return day.charAt(0) + day.slice(1).toLowerCase();
 }

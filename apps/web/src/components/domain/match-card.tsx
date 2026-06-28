@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { MapPin, Users } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import { formatMatchSkill } from "@/lib/constants";
 import { Card, CardContent } from "@/components/ui/card";
 import { SportBadge } from "@/components/domain/sport-badge";
 import { LifecycleBadge } from "@/components/domain/lifecycle-badge";
@@ -36,7 +37,7 @@ export function MatchCard({ match }: { match: Match }) {
               {match.confirmedCount}/{match.maxParticipants}
             </span>
           </div>
-          <Badge variant="outline">{match.skillLevelExpected}</Badge>
+          <Badge variant="outline">{formatMatchSkill(match.skillLevelExpected)}</Badge>
         </CardContent>
       </Card>
     </Link>
