@@ -68,6 +68,9 @@ export const removeParticipantSchema = z.object({
 export type CreateMatchBody = z.output<typeof createMatchSchema>;
 export type UpdateMatchBody = z.infer<typeof updateMatchSchema>;
 export type ListMatchesQuery = z.output<typeof listMatchesSchema>;
+export type CreateMatchInviteBody = z.infer<typeof createMatchInviteSchema>;
+export type UpdateMatchInviteBody = z.infer<typeof updateMatchInviteSchema>;
+
 export const createMatchChatMessageSchema = z.object({
   body: z.string().min(1).max(2000),
 });

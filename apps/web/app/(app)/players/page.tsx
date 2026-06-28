@@ -63,7 +63,7 @@ export default function PlayersPage() {
               allowAny
             />
             {skillLevel && (
-              <button type="button" className="text-xs text-primary" onClick={() => setSkillLevel("")}>
+              <button type="button" className="text-xs text-primary" onClick={() => setSkillLevel(null)}>
                 Clear skill filter
               </button>
             )}

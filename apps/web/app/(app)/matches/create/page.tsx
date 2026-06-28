@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label";
 import { useSports } from "@/features/sports/hooks/use-sports";
 import { useCreateMatchStore } from "@/stores/create-match-store";
 import { SkillLevelSelect } from "@/components/domain/skill-level-select";
-import type { SkillLevel } from "@/types";
 
 export default function CreateMatchStep1Page() {
   const router = useRouter();
